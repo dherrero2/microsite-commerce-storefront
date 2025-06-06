@@ -1,34 +1,107 @@
 ---
 import type { Props } from "@astrojs/starlight/props";
 
-// Check if we're on the commerce-services page
-const isCommerceServicesPage = Astro.url.pathname.includes(
-  "/playgrounds/commerce-services",
-);
+interface ContentPanelProps extends Props {
+  variant?: 'default' | 'full-width' | 'narrow';
+  spacing?: 'compact' | 'normal' | 'spacious';
+}
+
+const { 
+  variant = 'default', 
+  spacing = 'normal'
+} = Astro.props as ContentPanelProps;
+
+// Create CSS classes based on props
+const panelClasses = [
+  'content-panel',
+  `content-panel--${variant}`,
+  `content-panel--${spacing}`
+].join(' ');
+
+const containerClasses = [
+  'content-panel__container',
+  variant === 'full-width' ? 'content-panel__container--full-width' : ''
+].filter(Boolean).join(' ');
 ---
 
-<div class="content-panel">
-  <div
-    class={`sl-container ${isCommerceServicesPage ? "full-width-container" : ""}`}
-  >
+<div class={panelClasses}>
+  <div class={containerClasses}>
     <slot />
   </div>
 </div>
 
 <style>
   .content-panel {
-    padding: 1.25rem var(--sl-content-pad-x);
+    /* Use CSS custom properties for flexible theming */
+    --content-panel-padding-block: var(--content-panel-spacing, 1.25rem);
+    --content-panel-padding-inline: var(--sl-content-pad-x, 1rem);
+    --content-panel-max-width: var(--sl-content-width, 65ch);
+    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
-  .sl-container {
-    max-width: var(--sl-content-width);
+
+  /* Spacing variants */
+  .content-panel--compact {
+    --content-panel-spacing: 0.75rem;
   }
-  .full-width-container {
-    max-width: none !important;
+  
+  .content-panel--normal {
+    --content-panel-spacing: 1.25rem;
   }
-  .sl-container > :global(* + *) {
+  
+  .content-panel--spacious {
+    --content-panel-spacing: 2rem;
+  }
+
+  .content-panel__container {
+    padding: var(--content-panel-padding-block) var(--content-panel-padding-inline);
+    max-width: var(--content-panel-max-width);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .content-panel__container--full-width {
+    max-width: none;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .content-panel {
+      --content-panel-padding-inline: 1rem;
+    }
+    
+    .content-panel--compact {
+      --content-panel-spacing: 0.5rem;
+    }
+    
+    .content-panel--normal {
+      --content-panel-spacing: 1rem;
+    }
+    
+    .content-panel--spacious {
+      --content-panel-spacing: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .content-panel {
+      --content-panel-padding-inline: 0.75rem;
+    }
+  }
+
+  /* Reset margins for direct children to avoid double spacing */
+  .content-panel__container > :global(* + *) {
     margin-top: 0;
   }
-  .home-page-container {
-    max-width: none !important;
+
+  /* Ensure proper flow for content */
+  .content-panel__container > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .content-panel__container > :global(:last-child) {
+    margin-bottom: 0;
   }
 </style>

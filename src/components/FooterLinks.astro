@@ -61,26 +61,91 @@ import { Icon } from "@astrojs/starlight/components";
 <style>
   .wrapper {
     display: flex;
-    justify-content: left;
-    align-items: top;
-    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin-top: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
   }
+  
   .footerLinks {
-    display: block;
-    align-items: right;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     color: var(--sl-color-gray-2);
     font-size: 0.75rem;
-    justify-items: end;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0; /* Allow shrinking */
   }
+  
   .adobeLinks {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    line-height: 1.4;
+    justify-content: center;
+  }
+  
+  .adobeLinks a {
     white-space: nowrap;
   }
+  
   .socialLinks {
     color: var(--sl-color-accent);
     display: flex;
-    width: 100%;
     gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .copyright {
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .wrapper {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .footerLinks {
+      width: 100%;
+      align-items: center;
+    }
+    
+    .adobeLinks {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .adobeLinks a {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--sl-color-gray-6);
+      text-align: center;
+    }
+    
+    .adobeLinks a:last-child {
+      border-bottom: none;
+    }
+    
+    .socialLinks {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footerLinks {
+      font-size: 0.7rem;
+    }
+    
+    .socialLinks {
+      gap: 1.5rem;
+    }
   }
 </style>

@@ -57,6 +57,9 @@ ul li details ul:last-child {
 .sl-container {
   max-width: var(--sl-content-width);
   min-width: var(--sl-sidebar-width);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .sl-markdown-content :is(p) {
@@ -125,18 +128,6 @@ ul li details ul:last-child {
   vertical-align: baseline;
   max-width: 100%;
   overflow-x: auto;
-}
-
-.content-panel {
-  border-top: none;
-  display: flex;
-  padding: 1rem var(--sl-content-pad-x) 0rem;
-}
-
-.content-panel+.content-panel {
-  border-top: none;
-  display: flex;
-  padding: 0.5rem var(--sl-content-pad-x);
 }
 
 /* Auto Summary style */
@@ -265,6 +256,21 @@ select {
 
 body {
   overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal overflow globally */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .expressive-code.expressive-code {
@@ -696,5 +702,53 @@ main {
   }
   .changelog-entry {
     padding: 1rem;
+  }
+
+  /* Prevent horizontal scroll on mobile */
+  .sl-markdown-content table {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .sl-markdown-content pre {
+    overflow-x: auto;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  .sl-markdown-content img {
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  .sl-markdown-content iframe {
+    max-width: 100% !important;
+    width: 100%;
+  }
+
+  /* Handle wide code blocks */
+  .expressive-code {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Ensure containers don't overflow */
+  .content-panel,
+  .sl-container,
+  .main-frame {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Handle header on mobile */
+  header.header {
+    padding: 0.75rem 0.25rem;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 }
