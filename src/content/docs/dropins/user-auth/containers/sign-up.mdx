@@ -129,18 +129,19 @@ The SignUp container provides the following configuration options:
       'onSuccessCallback',
       'function',
       'No',
-      'Callback executed when the user successfully signs up, receiving userName and status as parameters.',
+      'Callback executed when the user successfully signs up, receiving userName, userEmail, and status as parameters.',
     ],
   ]}
 />
 
 ### Example
 
-The following example redirects the user to the account page if they are already authenticated. If not, the user is redirected first to the login page, then to the account page.
+The following example redirects the user to the account page if they are already authenticated. If not, the user is redirected first to the login page, then to the account page. The example also includes an onSuccessCallback that handles newsletter subscription when the user successfully signs up.
 
 ```javascript
 export default async function decorate(block) {
   const isAuthenticated = !!getCookie('auth_dropin_user_token');
+  let newsletterInput;
 
   if (isAuthenticated) {
     window.location.href = '/customer/account';
@@ -149,6 +150,36 @@ export default async function decorate(block) {
       hideCloseBtnOnEmailConfirmation: true,
       routeSignIn: () => '/customer/login',
       routeRedirectOnSignIn: () => '/customer/account',
+      slots: {
+        PrivacyPolicyConsent: async (ctx) => {
+          const wrapper = document.createElement('span');
+
+          newsletterInput = document.createElement('input');
+          newsletterInput.type = 'checkbox';
+          newsletterInput.name = 'newsletterSubscription';
+          newsletterInput.checked = true;
+
+          wrapper.appendChild(newsletterInput);
+        }
+      },
+      onSuccessCallback: (data) => {
+        // If newsletter checkbox is not checked, do not subscribe to newsletter
+        // The newsletterInput refers to a checkbox element in the sign-up form for newsletter subscription
+        if (!newsletterInput.checked) {
+          return;
+        }
+
+        // Subscribe to newsletter
+        const query = `
+          mutation ($email: String!) {
+            subscribeEmailToNewsletter(email: $email) {
+              status
+            }
+          }`;
+
+        const { userEmail: email } = data;
+        mesh.fetchGraphQl(query, { method: 'POST', variables: { email }});
+      }
     })(block);
   }
 }
