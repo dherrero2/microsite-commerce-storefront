@@ -201,6 +201,10 @@ async function config() {
                           link: '/setup/configuration/multistore-setup/'
                         },
                         {
+                          label: 'Prerendering setup',
+                          link: '/setup/configuration/prerendering-setup/'
+                        },
+                        {
                           label: 'Content delivery network',
                           link: '/setup/configuration/content-delivery-network/'
                         },

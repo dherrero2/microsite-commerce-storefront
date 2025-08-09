@@ -1,0 +1,256 @@
+---
+title: Adobe Commerce Storefront Prerendering Setup
+description: Complete step-by-step guide to set up Adobe Commerce storefront prerendering with App Builder and Edge Delivery Services.
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+import Aside from '@components/Aside.astro';
+import Tasks from '@components/Tasks.astro';
+import Task from '@components/Task.astro';
+import Callouts from '@components/Callouts.astro';
+
+This guide walks you through setting up Adobe Commerce storefront prerendering using App Builder and Edge Delivery Services. The setup includes automated configuration and guided steps to get your prerendering system operational.
+
+<Aside type="note">
+You need the **Developer** role in Adobe Admin Console to complete this setup.
+</Aside>
+
+## Prerequisites: App Builder Setup
+
+Before starting the main configuration, you must set up your App Builder environment.
+
+<Tasks>
+
+<Task>
+### Create App Builder project
+
+<Steps>
+1. Go to [Adobe Developer Console](https://developer.adobe.com/console)
+2. Choose **Create project from template**
+3. Select **App Builder**
+4. Choose your environment workspaces (Stage and Production recommended)
+5. Provide a descriptive project title
+6. Leave other fields as default settings
+</Steps>
+
+**Reason**: This creates the infrastructure needed for the prerendering service.
+
+</Task>
+
+<Task>
+### Download credentials
+
+<Steps>
+1. Click on your desired workspace (start with Stage for testing)
+2. Click **Download All** in the top-right corner
+3. Save the JSON file for use in the configuration wizard
+</Steps>
+
+**Reason**: This file contains the authentication credentials needed for setup.
+
+<Aside type="tip">
+Keep this JSON file secure as it contains sensitive authentication information.
+</Aside>
+
+</Task>
+
+</Tasks>
+
+## Configuration Wizard
+
+With your App Builder credentials ready, you can now proceed with the main setup process.
+
+<Tasks>
+
+<Task>
+### Create repository from template
+
+<Steps>
+1. Click the provided template link to create a repo in your organization
+2. Clone the newly created repository to your local machine
+</Steps>
+
+**Reason**: This gives you the base code structure needed for the project and provides local access to run setup commands.
+
+```bash
+git clone <your-repository-url>
+cd <your-repository-name>
+```
+
+</Task>
+
+<Task>
+### Run setup wizard
+
+Execute the setup command in your project directory:
+
+```bash
+npm run setup
+```
+
+**Reason**: This automates the initial configuration of your environment using the App Builder credentials.
+
+<Aside type="caution">
+Ensure you have the App Builder JSON file from the prerequisites before running this command.
+</Aside>
+
+</Task>
+
+<Task>
+### Configure template URL
+
+During step 3 of the wizard:
+
+<Steps>
+1. Expand the **advanced settings** section
+2. Check the template URL setting
+3. For localized sites, add `{locale}` token to create URL patterns
+</Steps>
+
+**Example transformation**:
+- From: `https://main--site--org.aem.page/en-us/products/default`
+- To: `https://main--site--org.aem.page/{locale}/products/default`
+
+**Reason**: This enables automatic locale handling for multi-language sites.
+
+</Task>
+
+<Task>
+### Set up path prefix
+
+Configure the URI pattern for product page URLs:
+
+<Steps>
+1. Define the path prefix using available tokens: `{locale}`, `{urlKey}`, `{sku}`
+2. For production environments, use a different prefix than your current setup
+3. Example: `/{locale}/products-prerendered/{urlKey}` when current is `/{locale}/products/{urlKey}`
+</Steps>
+
+**Reason**: This creates logical separation and allows safe deployment testing without affecting your current site structure.
+
+<Aside type="tip">
+You can change this path prefix later in `app.config.yaml` and redeploy with `aio app deploy`.
+</Aside>
+
+</Task>
+
+<Task>
+### Complete wizard setup
+
+<Steps>
+1. Finish the configuration process
+2. Note that a Site Context will be saved to your browser's localStorage
+3. You'll be redirected to the Storefront Prerender management interface
+</Steps>
+
+**Reason**: The Site Context authenticates you with the management interface for ongoing operations.
+
+</Task>
+
+</Tasks>
+
+## Customization and Deployment
+
+<Tasks>
+
+<Task>
+### Customize rendering logic
+
+Modify the code for structured data, markup, and templates according to your requirements.
+
+**Reason**: This tailors the output to match your specific business and design requirements.
+
+<Aside type="note">
+Refer to the rendering logic documentation for detailed customization options.
+</Aside>
+
+</Task>
+
+<Task>
+### Deploy the solution
+
+Deploy your prerendering stack:
+
+```bash
+npm run deploy
+```
+
+**Reason**: This publishes your prerendering infrastructure to Adobe's cloud environment.
+
+</Task>
+
+<Task>
+### Enable change detector rules
+
+<Steps>
+1. Go to the Storefront Prerender management interface
+2. Verify both change detector rules show green circles (enabled status)
+3. Ensure rules are properly configured for your catalog
+</Steps>
+
+**Reason**: These rules automatically trigger product page updates when changes occur in your catalog.
+
+</Task>
+
+<Task>
+### Verify system operation
+
+<Steps>
+1. Check that all catalog products are being published in the first operational cycle
+2. Browse and count products from the management interface
+3. Monitor the initial publishing process
+</Steps>
+
+**Reason**: This confirms the system is working correctly and processing your entire product catalog.
+
+</Task>
+
+</Tasks>
+
+## Frontend Integration
+
+<Task>
+### Update PDP Drop-in integration
+
+If you're using Product Detail Page (PDP) drop-ins:
+
+<Steps>
+1. Replace contents of `.product-details` block with PDP drop-in HTML
+2. Keep semantic markup as fallback for non-JavaScript environments
+3. Ensure proper integration with your existing frontend code
+</Steps>
+
+**Reason**: This provides rich context for search engines and LLM crawlers while maintaining client-side functionality.
+
+<Aside type="tip">
+The semantic HTML acts as a natural fallback when JavaScript is unavailable, improving SEO and accessibility.
+</Aside>
+
+</Task>
+
+## Key Considerations
+
+<Callouts>
+
+1. **Path Strategy**: Use different path prefixes for testing vs. production to enable safe switching
+2. **SEO Benefits**: Keep semantic HTML as fallback for better search engine compatibility  
+3. **Monitoring**: Regularly check the management interface to ensure proper operation
+4. **Localization**: Use locale tokens in URL patterns for multi-language support
+5. **Security**: Protect your App Builder credentials and Site Context information
+
+</Callouts>
+
+## What's Next?
+
+After completing this setup:
+
+- Review the operation and maintenance guidelines
+- Explore advanced customization options
+- Consider performance optimization strategies
+- Set up monitoring and alerting for your prerendering system
+
+<Aside type="note">
+Check out the dedicated considerations and use cases page for more information about advantages, prerequisites, and specific implementation scenarios.
+</Aside>
+
+**Summary**: This process sets up Adobe Commerce storefront prerendering by creating an App Builder project, configuring a template repository, running an automated setup wizard, and deploying the solution to generate pre-rendered product pages that improve performance and SEO.
