@@ -161,4 +161,3 @@ The name `MyNote` is an example name/variable specific to the page to which you 
 - Contact information
 - Version compatibility notes
 - Troubleshooting tips
-
