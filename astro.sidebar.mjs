@@ -352,7 +352,8 @@ export function generateSidebar() {
                     { label: 'ApplePay', link: '/dropins/payment-services/containers/apple-pay/' },
                     { label: 'CreditCard', link: '/dropins/payment-services/containers/credit-card/' },
                     { label: 'GooglePay', link: '/dropins/payment-services/containers/google-pay/' },
-                    { label: 'PayPalButtons', link: '/dropins/payment-services/containers/paypal-buttons/' }
+                    { label: 'PayPalButtons', link: '/dropins/payment-services/containers/paypal-buttons/' },
+                    { label: 'VaultedCreditCard', link: '/dropins/payment-services/containers/vaulted-credit-card/' }
                   ],
                 },
               ],
@@ -534,6 +535,7 @@ export function generateSidebar() {
                 { label: 'Overview', link: '/dropins/wishlist/' },
                 { label: 'Quick Start', link: '/dropins/wishlist/quick-start/' },
                 { label: 'Initialization', link: '/dropins/wishlist/initialization/' },
+                { label: 'Multistore', link: '/dropins/wishlist/multistore/' },
                 { label: 'Functions', link: '/dropins/wishlist/functions/' },
                 { label: 'Slots', link: '/dropins/wishlist/slots/' },
                 { label: 'Styles', link: '/dropins/wishlist/styles/' },
